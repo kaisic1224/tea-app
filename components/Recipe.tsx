@@ -28,7 +28,7 @@ const Recipe = () => {
           </div>
         </a>
       </Link>
-      <Link href={"/users/penisgang"}>
+      <Link href={"/users/axd"}>
         <div className='flex gap-2 cursor-pointer pl-3 max-w-fit'>
           <i className='hover:underline'>i am the author</i>
           <Image
