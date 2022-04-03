@@ -1,16 +1,21 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  motionValue,
+  useViewportScroll
+} from "framer-motion";
 import { GetStaticProps } from "next";
 import PageNavigator from "../components/PageNavigator";
 import { db } from "../firebase/clientApp";
 import { collection, getDocs } from "firebase/firestore";
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Modal from "../components/Modal";
 
-export const variants = {
+const variants = {
   hidden: {
     opacity: 0
   },
@@ -38,7 +43,7 @@ const header = {
   }
 };
 
-export interface tea {
+interface tea {
   name: string;
   image: string;
   description: string;
@@ -48,12 +53,22 @@ export interface tea {
   temperature: number;
 }
 
+const debounce = (callback: Function, delay = 3000) => {
+  let timeout: NodeJS.Timeout;
+  return (...args: any) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      callback.apply(args);
+    }, delay);
+  };
+};
+
 const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
   const [search, setSearch] = useState<string>("");
   const [recTeas, setTeas] = useState<tea[]>(teas);
   const [open, setOpen] = useState(false);
   const [mTea, setMTea] = useState<tea>();
-  const { scrollY } = useViewportScroll();
+  const [offset, setOffset] = useState(0);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -66,22 +81,36 @@ const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
     setTeas(showTeas);
   };
 
+  // useEffect(() => {
+  //   debouncedTeas();
+  // }, [search]);
+
+  // const debouncedTeas = useCallback(() => {
+  //   debounce(() => {
+  //     setTeas(teas.filter((tea) => {
+  //       tea.keywords.split(', ').includes(search)
+  //     }))
+  //   });
+  // }, []);
+
   return (
     <>
       <Head>
         <title>Start Brewing - TeaTinker</title>
       </Head>
 
-      {open && <Modal tea={mTea} setOpen={setOpen} scroll={scrollY} />}
-
       <motion.main
         variants={variants}
         initial='hidden'
         animate='show'
         className={`overflow-hidden min-h-screen ${
-          open && "overflow-y-hidden inset-0 fixed"
+          open && "inset-0 fixed overflow-y-scroll invis-scroll"
         }`}
+        style={open ? { top: `-${offset}px` } : {}}
       >
+        <AnimatePresence exitBeforeEnter>
+          {open && <Modal tea={mTea!} setOpen={setOpen} offset={offset} />}
+        </AnimatePresence>
         <div className='w-full h-40 bg-amber-400 flex items-center'>
           <motion.h1
             variants={header}
@@ -112,30 +141,27 @@ const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
                 placeholder='Search for teas'
                 onChange={(e) => {
                   setSearch(e.target.value);
-                  if (e.target.value.length === 0) {
-                    setTeas(teas);
-                  }
                 }}
                 value={search}
               />
             </motion.div>
           </form>
-          {/* browse around, filter out any non things,  */}
-          <div className='grid grid-cols-4 gap-4 my-5 relative'>
-            <AnimatePresence exitBeforeEnter>
+          <AnimatePresence exitBeforeEnter>
+            <motion.div className='grid grid-cols-4 gap-4 my-5 relative'>
               {recTeas.length != 0 ? (
                 recTeas.map((tea) => {
                   return (
                     <motion.div
                       key={tea.name}
-                      initial={{ opacity: 0, y: "-100%" }}
+                      initial={{ opacity: 0, y: "100%" }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: "100%" }}
                       className='group overflow-hidden cursor-pointer'
                       onClick={(e) => {
                         e.preventDefault();
-                        setOpen(!open);
                         setMTea(tea);
+                        setOffset(window.scrollY);
+                        setOpen(!open);
                       }}
                     >
                       <Image
@@ -151,12 +177,12 @@ const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
                   );
                 })
               ) : (
-                <span className='mt-56 font-bold left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 absolute'>
+                <span className='mt-5 font-bold left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 absolute'>
                   No teas found
                 </span>
               )}
-            </AnimatePresence>
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </motion.main>
     </>

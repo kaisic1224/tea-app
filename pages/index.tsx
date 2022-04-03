@@ -130,6 +130,29 @@ const Home: NextPage = () => {
             </motion.button>
           </motion.div>
         </section>
+        <footer>
+          <h2 className='font-bold text-5xl text-center'>Credits:</h2>
+          <ul className='flex flex-col font-bold pl-12 pb-8'>
+            <a
+              className='hover:text-amber-600'
+              href='https://www.medicalnewstoday.com/articles/321243#5.-Lemon-verbena-tea'
+            >
+              Medical News Today - Lemon verbena
+            </a>
+            <a
+              className='hover:text-amber-600'
+              href='https://www.everydayhealth.com/diet-nutrition/diet/best-teas-your-health/'
+            >
+              Everyday Health - Best Teas for Your Health
+            </a>
+            <a
+              className='hover:text-amber-600'
+              href='http://www.davidpeterslondon.com/blog/2016/9/15/5-teas-that-you-should-be-drinking#:~:text=Lapsang%20Souchong,antioxidant%20which%20helps%20prevent%20infections'
+            >
+              David Peters London - 5 Teas That You Should Be Drinking
+            </a>
+          </ul>
+        </footer>
       </motion.main>
     </>
   );
