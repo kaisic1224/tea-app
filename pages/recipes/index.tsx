@@ -1,7 +1,6 @@
 import Head from "next/head";
 import PageNavigator from "../../components/PageNavigator";
-import type { GetServerSideProps, NextPage } from "next";
-import { storageRef } from "../../firebase/clientApp";
+import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import { FirebaseStorage } from "firebase/storage";
 import { collection, getDocs, Timestamp } from "firebase/firestore";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -11,95 +10,74 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 import Recipe from "../../components/Recipe";
+import Navbar from "../../components/Navbar";
 // hover animation stack overflow where image gets enlarged and some info about article gets displayed
 
-interface recipe {
+export interface recipe {
+  approved: boolean;
+  id: string;
   author: string;
+  authorId: string;
   body: string[];
-  date: Date;
+  date: string;
   imageRef: string;
   prep: string[];
   title: string;
   rating: number;
 }
 
-interface comment {
-  rating: number;
-  body: string;
-  author: string;
-  date: Date;
-}
-
-const index: NextPage<{ recipes: recipe[] }> = ({ recipes }) => {
+const index: NextPage<{ recipesDb: recipe[] }> = ({ recipesDb }) => {
   const { data: session } = useSession();
   const [search, setSearch] = useState<string>();
+  const [recipes, setRecipes] = useState<recipe[]>([]);
   if (session) {
     return (
       <>
         <Head>
           <title>TeaTinker - Recipes</title>
+          <link rel='shortcut icon' href={"/leaf.png"} type='image/x-icon' />
         </Head>
+
         <header>
-          <div className='flex gap-2 items-center justify-between px-8'>
-            <div className='flex gap-2 items-center cursor-pointer'>
-              <Link href={"/"}>
-                <span className='font-bold text-xl'>
-                  <a className='text-amber-400'>Tea</a>Tinker
-                </span>
-              </Link>
-              <img
-                src='/leaf.png'
-                alt='leaf picture'
-                className='aspect-square w-6'
-              />
-            </div>
-            <PageNavigator />
-          </div>
+          <Navbar />
         </header>
 
-        <main className='px-8'>
+        <main className='px-8 pb-12'>
           <div className='flex justify-between items-center gap-6'>
             <div className='min-w-max'>
-              <div className='overflow-hidden'>
-                <motion.h1
-                  className='mt-6 text-4xl font-semibold'
-                  animate={{ opacity: 1 }}
-                  initial={{ opacity: 0 }}
-                  transition={{
-                    duration: 0.75,
-                    ease: "easeOut",
-                    delayChildren: 2
-                  }}
-                >
-                  Welcome back,{" "}
-                  <motion.span
-                    animate={{ y: 0 }}
-                    initial={{ y: "100%" }}
-                    transition={{ ease: "easeOut", delay: 4 }}
-                    className='text-amber-500 underline'
-                  >
+              <motion.h1
+                className='mt-6 text-4xl font-semibold'
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+                transition={{
+                  duration: 0.75,
+                  ease: "easeOut",
+                  delayChildren: 2
+                }}
+              >
+                Welcome back,{" "}
+                <Link href={`/users/${session.ref}`}>
+                  <a className='text-amber-500 hover:text-amber-400 underline cursor-pointer'>
                     {session.user?.name}
-                  </motion.span>
-                </motion.h1>
-              </div>
-              <div className='overflow-hidden'>
-                <motion.button
-                  className='cursor-default font-semibold'
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.75, ease: "easeOut", delay: 0.25 }}
+                  </a>
+                </Link>
+              </motion.h1>
+              <motion.button
+                className='cursor-default font-semibold'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.75, ease: "easeOut", delay: 0.25 }}
+              >
+                Not you?{" "}
+                <strong
+                  className='text-amber-500 hover:text-amber-400 cursor-pointer'
+                  onClick={() => signOut()}
                 >
-                  Not you?{" "}
-                  <strong
-                    className='text-amber-500 hover:text-amber-400 cursor-pointer'
-                    onClick={() => signOut()}
-                  >
-                    Sign out
-                  </strong>
-                </motion.button>
-              </div>
+                  Sign out
+                </strong>
+              </motion.button>
             </div>
-            <motion.div className='relative w-1/4'>
+            <div className='relative w-1/4'>
               <motion.input
                 className='block ml-auto rounded-full bg-slate-100 py-[.25em] pl-2 pr-6'
                 initial={{ width: 0 }}
@@ -111,7 +89,7 @@ const index: NextPage<{ recipes: recipe[] }> = ({ recipes }) => {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <FaSearch className='pointer-events-none absolute right-2 top-2/4 -translate-y-2/4' />
-            </motion.div>
+            </div>
           </div>
           <section className='mt-8 grid gap-3 gap-y-6 grid-cols-4 sm:grid-cols-3'>
             <Recipe />
@@ -119,6 +97,16 @@ const index: NextPage<{ recipes: recipe[] }> = ({ recipes }) => {
             <Recipe />
             <Recipe />
           </section>
+          <span className='block max-w-fit font-medium mx-auto'>
+            Can't find one you're looking for? Add it{" "}
+            <Link href='/recipes/add'>
+              <a>
+                <strong className='font-bold text-amber-500 hover:underline'>
+                  here
+                </strong>
+              </a>
+            </Link>
+          </span>
         </main>
       </>
     );
@@ -165,7 +153,7 @@ const index: NextPage<{ recipes: recipe[] }> = ({ recipes }) => {
 };
 export default index;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async (ctx) => {
   const recipes: any[] = [];
   const recipeCollection = collection(db, "recipes");
   await getDocs(recipeCollection).then((snapshot) => {
@@ -177,6 +165,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     });
   });
   return {
-    props: { recipes: recipes }
+    props: { recipesDb: recipes }
   };
 };

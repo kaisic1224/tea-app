@@ -34,12 +34,12 @@ const Modal = ({
         exit={{ scale: 0 }}
         className='bg-slate-200 lg:max-w-5xl rounded-md mx-auto p-7 overflow-hidden relative'
       >
-        <div className='absolute bg-slate-800 h-full top-0 right-0 w-8 ' />
+        <div className='absolute bg-slate-700 h-full top-0 right-0 w-8 ' />
         <h1 className='font-bold text-center text-3xl'>{tea.name}</h1>
         <div className='grid grid-cols-2 gap-7 mt-6'>
           <div className='relative'>
-            <div className='absolute bg-slate-800 -translate-y-4 translate-x-4 right-0 w-2/4 aspect-square' />
-            <div className='absolute w-2/4 aspect-video bg-slate-800 top-2/4 -translate-x-52 ' />
+            <div className='absolute bg-slate-700 -translate-y-4 translate-x-4 right-0 w-2/4 aspect-square' />
+            <div className='absolute w-2/4 aspect-video bg-slate-700 top-2/4 -translate-x-52 ' />
             <Image src={tea.image} width={500} height={500} objectFit='cover' />
           </div>
           <p className='text-xl flex justify-between flex-col'>

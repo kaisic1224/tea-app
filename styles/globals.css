@@ -17,3 +17,15 @@
 .invis-scroll::-webkit-scrollbar-thumb {
   background: transparent;
 }
+
+@layer components {
+  .text-form {
+    @apply text-xl pr-6 focus:outline-0 border-b-2 transition-all overflow-y-hidden
+     focus:bg-slate-100 hover:bg-slate-100 focus:border-b-amber-500 focus:border-b-4
+     focus:invalid:border-b-red-500;
+  }
+  .add-btn {
+    @apply flex mt-3 items-center gap-2 text-white font-medium bg-amber-500 shadow-sm
+    hover:bg-amber-400 max-w-fit cursor-pointer py-[.1em] px-[.75em] rounded-[.25rem];
+  }
+}

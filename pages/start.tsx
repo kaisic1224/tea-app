@@ -15,7 +15,7 @@ import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Modal from "../components/Modal";
 
-const variants = {
+export const variants = {
   hidden: {
     opacity: 0
   },
@@ -43,7 +43,7 @@ const header = {
   }
 };
 
-interface tea {
+export interface tea {
   name: string;
   image: string;
   description: string;
@@ -65,7 +65,7 @@ const debounce = (callback: Function, delay = 3000) => {
 
 const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
   const [search, setSearch] = useState<string>("");
-  const [recTeas, setTeas] = useState<tea[]>(teas);
+  const [recTeas, setTeas] = useState<tea[]>([]);
   const [open, setOpen] = useState(false);
   const [mTea, setMTea] = useState<tea>();
   const [offset, setOffset] = useState(0);
@@ -124,8 +124,8 @@ const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
         <PageNavigator />
         <div className='px-16 mx-auto text-center'>
           <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor='stress'>
-              Search through our list of recomended teas!
+            <label htmlFor='tea' className='font-semibold'>
+              Get started by looking through some teas!
             </label>
             <motion.div
               initial={{ opacity: 0 }}
@@ -137,8 +137,8 @@ const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
               <input
                 className='focus:outline-none w-full p-3 pl-9 rounded-full shadow-md bg-slate-50 hover:bg-slate-100'
                 type='text'
-                id='stress'
-                placeholder='Search for teas'
+                id='tea'
+                placeholder='ex. heart disease, cancer, weight loss, etc.'
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
@@ -178,7 +178,7 @@ const Start: NextPage<{ teas: tea[] }> = ({ teas }) => {
                 })
               ) : (
                 <span className='mt-5 font-bold left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 absolute'>
-                  No teas found
+                  Search for a tea
                 </span>
               )}
             </motion.div>

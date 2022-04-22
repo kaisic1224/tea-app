@@ -2,6 +2,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,17 +27,7 @@ const db = getFirestore(app);
 // Initialize and get ref to storage
 const storage = getStorage(app);
 
-const storageRef = ref(storage);
+// Initialize auth
+const auth = getAuth(app);
 
-// Initialize collection
-// const colRef = collection(db, "teas");
-
-// Get all documents inside collection
-// getDocs(colRef).then((snapshot) => {
-//   let teas = [];
-//   snapshot.docs.forEach((document) =>
-//     teas.push({ ...document.data(), id: document.id })
-//   );
-// });
-
-export { db, storageRef };
+export { db, storage, auth };

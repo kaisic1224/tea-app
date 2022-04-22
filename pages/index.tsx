@@ -40,6 +40,7 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>TeaTinker | Home</title>
+        <link rel='shortcut icon' href={"/leaf.png"} type='image/x-icon' />
       </Head>
       <motion.main
         variants={variants}

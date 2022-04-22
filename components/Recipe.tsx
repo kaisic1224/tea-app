@@ -4,21 +4,21 @@ import { FaStar } from "react-icons/fa";
 
 const Recipe = () => {
   return (
-    <div className='justify-self-center shadow-md'>
-      <Link href={`/recipes/pepe`}>
-        <a>
+    <div className='justify-self-center shadow-md pb-2'>
+      <Link href={`/recipes/GdogKEYtLR3Zo5BadJ46`}>
+        <a className='group'>
           <Image
-            className='blur-[1px] hover:blur-0 transition-all scale-110 hover:scale-100'
+            className='transition-all scale-105 group-hover:scale-100'
             src={"/green.jpg"}
             width={500}
             height={500}
             objectFit='cover'
           />
           <div className='flex justify-between cursor-default px-3'>
-            <h3 className='cursor-pointer font-bold hover:text-amber-600'>
+            <h3 className='cursor-pointer font-bold group-hover:text-amber-600'>
               Awesome Green Tea
             </h3>
-            <div className='flex gap-0.5'>
+            <div className='flex gap-0.5 pointer-events-none'>
               <FaStar />
               <FaStar />
               <FaStar />
@@ -28,17 +28,17 @@ const Recipe = () => {
           </div>
         </a>
       </Link>
-      <Link href={"/users/axd"}>
-        <div className='flex gap-2 cursor-pointer pl-3 max-w-fit'>
-          <i className='hover:underline'>i am the author</i>
+      <Link href={"/users/WZV5KpPZTedbqtZ6LOu8"}>
+        <a className='flex group gap-2 cursor-pointer pl-3 max-w-fit'>
+          <i className='group-hover:underline'>i am the author</i>
           <Image
             src={`/white.jpg`}
             objectFit='cover'
             width={25}
-            height={25}
+            height={20}
             className='rounded-full aspect-square'
           />
-        </div>
+        </a>
       </Link>
     </div>
   );
