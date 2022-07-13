@@ -1,11 +1,4 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where
-} from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
@@ -16,8 +9,7 @@ import { motion } from "framer-motion";
 import { recipe } from "../recipes";
 import Link from "next/link";
 import { FaPencilAlt } from "react-icons/fa";
-import { spawn } from "child_process";
-import { ChangeEvent, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface user {
   id: string;
@@ -68,20 +60,18 @@ const liVars = {
 };
 
 const user: NextPage<{ user: user }> = ({ user }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession({ required: true });
   const [recipes, setRecipes] = useState(user.recipes);
   const [select, setSelect] = useState({ value: "Ddate" });
-
-  const handleChange = (e: any) => {
-    setSelect({ value: e.target.value });
+  useEffect(() => {
     let newArr = [...recipes];
     switch (select.value) {
-      case "Ddate":
+      case "Adate":
         newArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
         setRecipes(newArr);
         break;
 
-      case "Adate":
+      case "Ddate":
         newArr.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
         setRecipes(newArr);
         break;
@@ -91,7 +81,7 @@ const user: NextPage<{ user: user }> = ({ user }) => {
         setRecipes(newArr);
         break;
     }
-  };
+  }, [select]);
 
   return (
     <>
@@ -174,7 +164,7 @@ const user: NextPage<{ user: user }> = ({ user }) => {
                 Sort by:{" "}
                 <select
                   value={select.value}
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setSelect({ value: e.target.value })}
                   name='sort-order'
                 >
                   <option value='Ddate'>Date (newest)</option>
@@ -184,7 +174,7 @@ const user: NextPage<{ user: user }> = ({ user }) => {
               </label>
             </motion.div>
           </div>
-          <motion.p variants={vars}>
+          <motion.div variants={vars}>
             {user.recipes.length === 0 ? (
               <span>{user.name} hasn't posted anything yet</span>
             ) : (
@@ -201,14 +191,16 @@ const user: NextPage<{ user: user }> = ({ user }) => {
                 whileInView='show'
                 viewport={{ once: true }}
               >
-                {session?.ref === user.id
-                  ? recipes.map((recipe: recipe) => {
+                {status === "authenticated" && session?.ref === user.id
+                  ? recipes.map((recipe) => {
                       return (
                         <motion.li variants={liVars} key={recipe.id}>
                           <Link href={`/recipes/${recipe.id}`}>
                             <a
                               className={`hover:underline ${
-                                recipe.approved === false && "text-slate-500"
+                                recipe.approved === false
+                                  ? "text-slate-500"
+                                  : ""
                               }`}
                             >
                               {recipe.title} <i>{recipe.date.slice(4, 15)}</i>{" "}
@@ -220,22 +212,20 @@ const user: NextPage<{ user: user }> = ({ user }) => {
                         </motion.li>
                       );
                     })
-                  : [...recipes]
-                      .filter((_recipe) => _recipe.approved === true)
-                      .map((recipe) => {
-                        return (
-                          <motion.li variants={liVars} key={recipe.id}>
-                            <Link href={`/recipes/${recipe.id}`}>
-                              <a className='hover:underline'>
-                                {recipe.title} <i>{recipe.date.slice(4, 15)}</i>{" "}
-                              </a>
-                            </Link>
-                          </motion.li>
-                        );
-                      })}
+                  : [...recipes].map((recipe) => {
+                      return (
+                        <motion.li variants={liVars} key={recipe.id}>
+                          <Link href={`/recipes/${recipe.id}`}>
+                            <a className='hover:underline'>
+                              {recipe.title} <i>{recipe.date.slice(4, 15)}</i>{" "}
+                            </a>
+                          </Link>
+                        </motion.li>
+                      );
+                    })}
               </motion.ul>
             )}
-          </motion.p>
+          </motion.div>
         </motion.div>
         <motion.span
           initial={{ y: 100, opacity: 0 }}
