@@ -1,0 +1,122 @@
+[
+  {
+    "_id": 1,
+    "name": "Green tea",
+    "image": "/green.jpg",
+    "description": "Reduces inflammation, improves brain health, promotes weight loss, prevents chronic diseases.",
+    "keywords": "calm, china, heart disease, brain, weight loss",
+    "origin": "China",
+    "brew_time": 2,
+    "temperature": 80
+  },
+  {
+    "_id": 2,
+    "name": "White tea",
+    "image": "/white.jpg",
+    "description": "Reduces risk of cancer, heart disease. Can also help boost metabolism and prevent new fat cells from forming",
+    "keywords": "cancer, heart disease, weight loss, china",
+    "origin": "China",
+    "brew_time": 5,
+    "temperature": 85
+  },
+  {
+    "_id": 3,
+    "name": "Assam tea",
+    "image": "/assam.jpg",
+    "description": "Reduces inflammation, boosts immune system, high in caffeine.",
+    "keywords": "cancer, inflammation, immune system, india",
+    "origin": "India",
+    "brew_time": 5,
+    "temperature": 95
+  },
+  {
+    "_id": 4,
+    "name": "Jasmine tea",
+    "image": "/jasmine.jpg",
+    "description": "Calming, lowers stress regulates moods, improves brain function.",
+    "keywords": "cancer, brain, stress, japan",
+    "origin": "Japan",
+    "brew_time": 4,
+    "temperature": 80
+  },
+  {
+    "_id": 5,
+    "name": "Rooibos tea",
+    "image": "/rooibos.jpg",
+    "description": "Protects and strengthens liver from toxins, lowers blood pressure, and relaxes tense muscles.",
+    "keywords": "cancer, brain, blood pressure, stress, africa",
+    "origin": "South Africa",
+    "brew_time": 5,
+    "temperature": 100
+  },
+  {
+    "_id": 6,
+    "name": "Hibiscus tea",
+    "image": "/hibiscus.jpg",
+    "description": "Fights certain type of leukemia cells, regulates blood pressure, fights tumor cells in skin cancer, or prostate cancer cells.",
+    "keywords": "cancer, blood pressure, africa",
+    "origin": "Africa",
+    "brew_time": 5,
+    "temperature": 100
+  },
+  {
+    "_id": 7,
+    "name": "Lemon verbena tea",
+    "image": "/lemon-verbena.jpg",
+    "description": "Discourages formation of fatty acids, and reduces inflammation.",
+    "keywords": "inflammation, weight loss, south america",
+    "origin": "South America",
+    "brew_time": 4,
+    "temperature": 95
+  },
+  {
+    "_id": 8,
+    "name": "Oolong tea",
+    "image": "/oolong.jpg",
+    "description": "Lowers cholesterol, reduces risk of dyslipidemia, promotes weight loss, and lowers risk of cardiovascular disease.",
+    "keywords": "inflammation, cholesterol, heart disease, weight loss, china",
+    "origin": "China",
+    "brew_time": 5,
+    "temperature": 95
+  },
+  {
+    "_id": 9,
+    "name": "Chamomile tea",
+    "image": "/chamomile.jpg",
+    "description": "Low in caffeine, reduces inflammation and anxiety, boosts immune system, calming.",
+    "keywords": "inflammation, stress, egypt, immune system",
+    "origin": "Egypt",
+    "brew_time": 5,
+    "temperature": 100
+  },
+  {
+    "_id": 10,
+    "name": "Ginger tea",
+    "image": "/ginger.jpg",
+    "description": "Treats nausea and vomiting, treats sore throats and coughs, prevents diseases such as diabetes and cancer.",
+    "keywords": "nausea, vomiting, sore throat, diabetes, cancer, asia",
+    "origin": "Asia",
+    "brew_time": 30,
+    "temperature": 100
+  },
+  {
+    "_id": 11,
+    "name": "Peppermint tea",
+    "image": "/peppermint.jpg",
+    "description": "Treats bloating and sore throats, eases chest pain, soothing and low in caffeine.",
+    "keywords": "bloating, sore throat, stress",
+    "origin": "Middle East",
+    "brew_time": 2,
+    "temperature": 90
+  },
+  {
+    "_id": 12,
+    "name": "Lapsang tea",
+    "image": "/lapsang.jpg",
+    "description": "Lowers cholesterol, prevents cardiovascular disease, boosts immune system.",
+    "keywords": "cholesterol, heart disease, immune system",
+    "origin": "China",
+    "brew_time": 3,
+    "temperature": 95
+  }
+]
